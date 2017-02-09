@@ -14,8 +14,20 @@
       <url-pattern>/sign</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>addmission</servlet-name>
+        <servlet-class>com.example.guestbook.CreateMissionServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>addmission</servlet-name>
+        <url-pattern>/addmission</url-pattern>
+    </servlet-mapping>
+
+
+
     <welcome-file-list>
-        <welcome-file>guestbook.jsp</welcome-file>
+        <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
 <!-- [END standard_mappings] -->
 

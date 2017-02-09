@@ -101,6 +101,7 @@
     <div><input type="submit" value="Switch Guestbook"/></div>
 </form>
 <p><a href="/login.jsp">link</a></p>
+<p><a href="/AddMission.jsp">testPage</a></p>
 </body>
 </html>
 <%-- //[END all]--%>
