@@ -38,7 +38,7 @@ public class CreateMissionServlet extends HttpServlet {
         addMission.setData(data);
         ObjectifyService.ofy().save().entity(addMission).now();
 
-        resp.sendRedirect("/AddMission.jsp");
+        resp.sendRedirect("/newMission.jsp");
         return;
     }
 }

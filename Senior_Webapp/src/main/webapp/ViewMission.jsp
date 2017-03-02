@@ -59,7 +59,11 @@
         for(Mission m : missions){
 %>
     <p><b>Mission Date: <%= m.getDate().toString() %>\tId:<%= m.getId().toString() %></b>
-       <p> Data: <%= m.getData() %></p></p>
+       <p> Data: <%= m.getData() %></p>
+       <%
+        System.out.println(m.getData());
+        %>
+       <p> MTxt: <%= "input" %> </p></p>
 <%
         }
     }

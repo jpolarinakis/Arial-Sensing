@@ -14,7 +14,7 @@
     <%
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
-        String redirectURL = "/AddMission.jsp";
+        String redirectURL = "/newMission.jsp";
         if(user != null){
             response.sendRedirect(redirectURL);
             return;
