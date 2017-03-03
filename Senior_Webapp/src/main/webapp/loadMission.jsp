@@ -5,8 +5,8 @@
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 
-<%@ page import="com.example.guestbook.DroneOwner" %>
-<%@ page import="com.example.guestbook.Mission" %>
+<%@ page import="trafficsense.DroneOwner" %>
+<%@ page import="trafficsense.Mission" %>
 <%@ page import="com.googlecode.objectify.Key" %>
 <%@ page import="com.googlecode.objectify.ObjectifyService" %>
 
@@ -31,9 +31,9 @@
 %>
 
 <nav>
-    <a href="/AddMission.jsp">addMission</a>|
-    <a href="/ViewMission.jsp">viewMissions</a>|
-    <a href='<%= userService.createLogoutURL("/login.jsp", null) %>'>logout</a>|
+    <a href="/newMission.jsp">addMission</a>|
+    <a href="/loadMission.jsp">loadMissions</a>|
+    <a href='<%= userService.createLogoutURL("/index.jsp", null) %>'>logout</a>|
     <%= user.getUserId() %>
 </nav>
 

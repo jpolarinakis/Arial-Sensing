@@ -25,7 +25,7 @@
 
 <nav>
     <a href="/newMission.jsp">addMission</a>|
-    <a href="/ViewMission.jsp">viewMissions</a>|
+    <a href="/loadMission.jsp">viewMissions</a>|
     <a href='<%= userService.createLogoutURL("/login.jsp", null) %>'>logout</a>|
     <%= user.getUserId() %>
 

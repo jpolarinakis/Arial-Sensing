@@ -1,4 +1,4 @@
-package com.example.guestbook;
+package trafficsense;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;

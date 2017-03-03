@@ -1,3 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.google.appengine.api.users.User" %>
+<%@ page import="com.google.appengine.api.users.UserService" %>
+<%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <html>
 <head>
 	<title>Landing Page</title>
@@ -16,6 +20,13 @@
 }
 </style>
 </head>
+<%//Responsible for detecting user and redirecting in the case of no user
+    UserService userService = UserServiceFactory.getUserService();
+    User user = userService.getCurrentUser();
+    if(user == null){
+
+    }
+%>
 <body>
 <p id = "helloText">Hello!</p>
 <button id = "logoutButton" onclick = "logout()">Logout</button>
@@ -26,6 +37,7 @@
 <br>
 <button class = "button" id = "dataButton" onclick = "DB()">Data</button>
 </body>
+
 <!-- Below this line will be the necessary javascript code -->
 <script type="text/javascript">
 /*
