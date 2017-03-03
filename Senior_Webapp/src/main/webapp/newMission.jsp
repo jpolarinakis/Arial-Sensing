@@ -26,7 +26,7 @@
 <nav>
     <a href="/newMission.jsp">addMission</a>|
     <a href="/loadMission.jsp">viewMissions</a>|
-    <a href='<%= userService.createLogoutURL("/login.jsp", null) %>'>logout</a>|
+    <a href='<%= userService.createLogoutURL("/index.jsp", null) %>'>logout</a>|
     <%= user.getUserId() %>
 
 </nav>
@@ -117,7 +117,7 @@ function createNewScript()
 
   var ret = "";
   var form = document.getElementById("LatLongData").innerHTML;
-  var dot = "..";
+  var dot = "!";
   var blah = totalLatLongs;
   //first we remove the table headers
   var endOfTableHeader = "</tr>"
@@ -142,9 +142,12 @@ function createNewScript()
         var endNum =  form.search('</td>');
         ret = ret + form.substring(27,endNum) + dot;
         form = form.substring(endNum+5,form.length);
+        if(j==1){
+        	ret = ret.substring(0,ret.length-1);
+      	}
       }
   }
-  ret = ret.substring(0,ret.length-2);
+  
   var actionPath = "/addmission";
   var paramName = "data";
   var postForm = document.createElement("form");

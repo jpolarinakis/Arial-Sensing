@@ -84,8 +84,7 @@ public class Mission {
             return go;
         }
     }
-
-    private String convert(String message)
+    public String convert(String message)
     {
         ArrayList<MyPoint> gps = translate(message);
         final String tab = "\t";
@@ -115,31 +114,29 @@ public class Mission {
         }
         /*
          * TODO: add download capabillity so user gets the script downloaded
-         *  	Current version prints out the script to the console
+         *      Current version prints out the script to the console
          * */
         String ret = "";
         for(int i = 0; i < putStrings.size(); i++)
             ret = ret + putStrings.get(i)+ "\n";
         return ret;
     }
-
-    private ArrayList<MyPoint> translate(String message)
+    public ArrayList<MyPoint> translate(String message)
     {
         // (lat..long..height..go)(...)
         ArrayList<MyPoint> ret = new ArrayList<MyPoint>();
         StringTokenizer st = new StringTokenizer(message, "#");
         while(st.hasMoreElements()){
-            StringTokenizer splice = new StringTokenizer(st.nextToken(), "..");
+            StringTokenizer splice = new StringTokenizer(st.nextToken(), "!");
             double lat = Double.valueOf(splice.nextToken());
             double lng = Double.valueOf(splice.nextToken());
             double height = Double.valueOf(splice.nextToken());
             int go = Integer.valueOf(splice.nextToken());
             MyPoint mp = new MyPoint(lat,lng,height,go);
-            ret.add(mp);			
-        }		
+            ret.add(mp);            
+        }       
         return ret;
     }
-
-
+    
 }
 

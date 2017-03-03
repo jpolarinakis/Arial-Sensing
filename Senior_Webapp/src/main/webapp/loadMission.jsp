@@ -63,7 +63,7 @@
        <%
         System.out.println(m.getData());
         %>
-       <p> MTxt: <%= "input" %> </p></p>
+       <p> MTxt: <%= m.toMissionText() %> </p></p>
 <%
         }
     }
