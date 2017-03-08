@@ -58,12 +58,9 @@
 <%
         for(Mission m : missions){
 %>
-    <p><b>Mission Date: <%= m.getDate().toString() %>\tId:<%= m.getId().toString() %></b>
-       <p> Data: <%= m.getData() %></p>
-       <%
-        System.out.println(m.getData());
-        %>
-       <p> MTxt: <%= m.toMissionText() %> </p></p>
+    <p><b>Mission Date: <%= m.getDate().toString() %> Id:<%= m.getId().toString() %></b>
+       <p> Data: <a href=<%="/viewmission/" + m.getId().toString()%>>load</a></p>
+       <p> MTxt: <%= "input" %> </p></p>
 <%
         }
     }

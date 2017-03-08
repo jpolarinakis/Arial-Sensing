@@ -16,10 +16,10 @@ public class OfyHelper implements ServletContextListener {
 
     ObjectifyService.register(DroneOwner.class);
     ObjectifyService.register(Mission.class);
+    ObjectifyService.register(MissionData.class);
   }
 
   public void contextDestroyed(ServletContextEvent event) {
     // App Engine does not currently invoke this method.
   }
 }
-
