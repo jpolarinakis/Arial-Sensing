@@ -60,7 +60,6 @@
 %>
     <p><b>Mission Date: <%= m.getDate().toString() %> Id:<%= m.getId().toString() %></b>
        <p> Data: <a href=<%="/viewmission/" + m.getId().toString()%>>load</a></p>
-       <p> MTxt: <%= "input" %> </p></p>
 <%
         }
     }
