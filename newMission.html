@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3 id = "scriptTest">New Mission</h3>
+    <div id="map"></div>
+    <div>
+        <p>Current Lat/Long Location of Marker is:</p>
+        <p id = "LatLongPlace"></p>
+        <button id = "updateButton" onclick="addNewLatLong()"> Add new position to script</button>
+        <button id = "createScript" onclick= "createNewScript()">Generate Script</button>
+    </div>
+    <div id = "LatLongData"></div>
+
+    <!-- HERE IS THE JAVASCRIPT -->
+    <script>
+    //var myLatLng = {lat: 30.2672, lng: -97.7431};
+    var myLatLng = {lat: -35.363, lng: 149.165};
+    var marker;
+    var totalLatLongs;
+    var currentScript;
+    //Table variables                       
+    var thLat = "<th> Latitude </th>";
+    var thLong = "<th> Longitude </th>";
+    var thHeight = "<th> Height </th>";
+    var thHover = "<th> Hover Time </th>";
+    var editTd = "<td contenteditable='true'>";
+    var endTd = "</td>";
+    var td = "<td>";
+    var tr = "<tr>";
+    var eTr = "</tr>";
+
+function initMap() {
+  
+  totalLatLongs = 0;
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 4,
+    center: myLatLng
+  });
+
+    marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    draggable:true,
+    title: 'marker'
+
+  });
+}
+function addNewLatLong(){
+
+    var initTable = '<table>';
+    var endTable = '</table>';
+    var tableHeader = '<tr> <th> Point Number </th> <th> Latitude </th> <th> Longitude </th> <th> Height </th> <th> Hover Time </th> </tr>';
+    var html = "";
+    var newTotal = totalLatLongs + 1;
+    var buttonTestHTML = '<button onclick = "deleteLine(' + newTotal +  ')">  delete </button>';
+    //console.log(buttonTestHTML);
+    document.getElementById("LatLongPlace").innerHTML = marker.position;
+
+    if(totalLatLongs == 0){
+      html = initTable + tableHeader;
+    }
+    else
+    {
+      html = document.getElementById("LatLongData").innerHTML;
+      html = html.substring(0,html.length-8);
+    }
+    totalLatLongs = totalLatLongs + 1;
+    var lat = marker.position.lat();
+    var lng = marker.position.lng();
+
+    html = html + " " + tr + td + totalLatLongs + endTd +  td + lat + endTd + td + lng + endTd + editTd + "400" + endTd + editTd + "0" + endTd + td + buttonTestHTML + endTd + eTr;
+    html = html + endTable;
+    document.getElementById("LatLongData").innerHTML = html;
+}
+function createNewScript()
+{
+
+  var ret = "";
+  var form = document.getElementById("LatLongData").innerHTML;
+  var dot = "!";
+  var blah = totalLatLongs;
+
+  //first we remove the table headers
+  var endOfTableHeader = "</tr>"
+  var removeTableHeader = form.search(endOfTableHeader);
+  form = form.substring(removeTableHeader+5,form.length);
+  for(i = 0; i < totalLatLongs; i++)
+  {
+      var end = "</td>";
+      var numPoint = form.search(end);
+      form = form.substring(numPoint+5,form.length);
+      ret = ret + "#";
+      for(j = 0; j < 2; j++)
+      {
+        //find </td>, I know that <td> is at the beginning
+        // therefore by knowing the beginning of the number, and the end, I know how long the number is and can parse it
+        var endNum =  form.search('</td>');
+        ret = ret + form.substring(4,endNum) + dot;
+        form = form.substring(endNum+5,form.length);
+      }
+      for(j = 0;j < 2; j++)
+      {
+        var endNum =  form.search('</td>');
+        ret = ret + form.substring(27,endNum) + dot;
+        form = form.substring(endNum+5,form.length);
+        if(j==1)
+        {
+          ret = ret.substring(0,ret.length-1);
+        }
+
+      }
+
+  }
+ 
+  //up to this point is tested and it works!
+
+}
+function post(path, params, method) {
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+         }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}//http://stackoverflow.com/questions/133925/javascript-post-request-like-a-form-submit
+function deleteLine(num) {
+  var initTable = '<table>';
+  var endTable = '</table>';
+  var tableHeader = '<tr> <th> Point Number </th> <th> Latitude </th> <th> Longitude </th> <th> Height </th> <th> Hover Time </th> </tr>';
+  var form = document.getElementById("LatLongData").innerHTML;
+  //this is test code
+  //console.log("i am deleting: " + num);
+  //console.log("there are a total of: " + totalLatLongs);
+  //this is the end of the test code
+  if(totalLatLongs == 1)//if there is only one entry just start over
+  {
+    form = initTable + tableHeader + endTable;
+    document.getElementById("LatLongData").innerHTML = form;
+    totalLatLongs = 0;
+  }
+  else{//else not
+      var toDelete = "<td>" + num + "</td>";
+      var newNum = num +1;
+      var endDelete = "<td>" + newNum + "</td>";
+      var init = form.search(toDelete);
+      var endPlace = form.search(endDelete);
+      if(num == totalLatLongs)//we are deleting the last one and we should just go to the end
+      {
+
+        var begin = form.substring(0,init);
+        form = begin + endTable;
+        totalLatLongs--;
+        document.getElementById("LatLongData").innerHTML = form;
+      }
+      else {        
+        var begin = form.substring(0,init);
+        var end = form.substring(endPlace,form.length);
+        form = begin + end;
+        //finally we need to change all the IDs so they'r correct
+        //this changes the number to the left
+        for(i = num + 1; i <= totalLatLongs; i++)
+        {
+           var find = "<td>" + i + "</td>";
+           var init = form.search(find);
+           var begin = form.substring(0,init+4);
+           var end = form.substring(init+5,form.length);
+           var newNum = i-1;
+           form = begin + newNum + end;
+        }
+
+        //this changes the number within delete
+        var finalform = "";//honestly I just wanted the pun, I know that this is a terrible variable name
+        //first, we need to take all the html, from (0,the one right before we delete)
+        var toSearch = "<td>" + num + "</td>";
+        var finalSpot = form.search(toSearch);
+        if(finalSpot != -1)
+        {
+        finalform += form.substring(0,finalSpot);
+        form = form.substring(finalSpot,form.length);
+      }
+
+        for(i = num+1; i <= totalLatLongs; i++)
+        {
+          finalSpot = form.search("delete");
+          /*
+          Having run a test, finalSpot locates the delete that is a part of "deleteLine" rather than delelete. 
+          Must ensure that picks up the deleteLine and then goes on to grap the other delete.
+          */
+
+          if(i < totalLatLongs){
+          var begin = form.substring(0,finalSpot+11);
+          //so now we've grabbed up to deleteLine but that other delete is going to thow problems later on
+          var end = form.substring(finalSpot+12, finalSpot+38);//we don't actually need to do this if we're on the last one
+          form = form.substring(finalSpot+38,form.length);
+          var newNum = i-1;
+          finalform += begin + newNum + end;
+        }//anything that's not the last one
+        else//the last one. So here we just add begin, newNum and give it everything else and stop
+        {
+            var finalSpot = form.search("delete");
+            finalform += form.substring(0,finalSpot+11) + newNum + form.substring(finalSpot+12,form.length);
+           
+
+        }
+        }
+        document.getElementById("LatLongData").innerHTML = finalform;
+        totalLatLongs--;
+
+      }
+      
+}
+}
+
+
+    </script>
+
+<!-- HERE IS THE END OF THE JAVASCRIPT -->
+
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFYd7tmF3jdzQOgIZg5lhkR59YCpSGzcE&callback=initMap">
+    </script>
+    <script type="text/javascript">
+      google.maps.event.addListener(map, 'click', function(event) {
+   placeMarker(event.latLng);
+});
+      function placeMarker(location) {
+    var marker = new google.maps.Marker({
+        position: location, 
+        map: map
+    });
+}
+    </script>
+  </body>
+</html>
