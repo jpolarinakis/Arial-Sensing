@@ -13,16 +13,18 @@ import com.googlecode.objectify.ObjectifyService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 
 import java.util.List;
 public class ViewMissionServlet extends HttpServlet {
 
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         UserService userservice = UserServiceFactory.getUserService();
         User user = userservice.getCurrentUser();
         if(user == null){
@@ -30,29 +32,31 @@ public class ViewMissionServlet extends HttpServlet {
             return;
         }
         
-        resp.setContentType("text/html");
-        PrintWriter out = resp.getWriter();
-        
-        /* nav bar */
-        out.print("<nav><a href=\"/newMission.jsp\">addMission</a>|<a href=\"/loadMission.jsp\">viewMissions</a>|<a href=\"" + userservice.createLogoutURL("/login.jsp", null) + "\">logout</a>|" + user.getUserId() + "</nav>");
+        String missionString;
 
         String missionIdStr = req.getPathInfo();
         missionIdStr = missionIdStr.substring(1);
         Long missionId = Long.decode(missionIdStr);
         
         if(missionId != null){
-        Key<Mission> queryKey = Key.create(Mission.class, missionId);
-        List<MissionData> data = ObjectifyService.ofy()
-        .load()
-        .type(MissionData.class)
-        .ancestor(queryKey)
-        .list();
+            Key<Mission> queryKey = Key.create(Mission.class, missionId);
+            List<MissionData> data = ObjectifyService.ofy()
+                .load()
+                .type(MissionData.class)
+                .ancestor(queryKey)
+                .list();
         
-        MissionData mDataClass = data.get(0);
-        out.print("<p>" + mDataClass.getMissionScript() + "</p>");
+            MissionData mDataClass = data.get(0);
+            missionString = mDataClass.getMissionScript();
         }else{
-            out.println(missionIdStr + " *** ");
-            out.println(missionId);
+            missionString = missionIdStr + " *** ";
         }
+        
+        req.setAttribute("missionFile", missionString);
+        RequestDispatcher dispatch = req.getRequestDispatcher("/viewMission.jsp");
+        if(dispatch == null){
+            return;
+        }
+        dispatch.forward(req, resp);
     }
 }
