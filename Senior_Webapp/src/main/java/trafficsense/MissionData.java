@@ -69,7 +69,7 @@ public class MissionData{
     private String convert(String message)
     {
         ArrayList<MyPoint> gps = translate(message);
-        final String tab = "\t";
+        final String tab = "\\t";
         final String zero = "0";
         final String one = "1";
         ArrayList<String> putStrings = new ArrayList<String>();
@@ -100,7 +100,7 @@ public class MissionData{
          * */
         String ret = "";
         for(int i = 0; i < putStrings.size(); i++)
-            ret = ret + putStrings.get(i)+ "\n";
+            ret = ret + putStrings.get(i)+ "\\n";
         return ret;
     }
 

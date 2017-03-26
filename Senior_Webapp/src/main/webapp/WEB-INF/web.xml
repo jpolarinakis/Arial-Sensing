@@ -14,7 +14,7 @@
         <url-pattern>/addmission</url-pattern>
     </servlet-mapping>
 
-<servlet>
+    <servlet>
         <servlet-name>viewmission</servlet-name>
         <servlet-class>trafficsense.ViewMissionServlet</servlet-class>
     </servlet>
@@ -22,6 +22,16 @@
     <servlet-mapping>
         <servlet-name>viewmission</servlet-name>
         <url-pattern>/viewmission/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>downloadmissiontext</servlet-name>
+        <servlet-class>trafficsense.DownloadMissionServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>downloadmissiontext</servlet-name>
+        <url-pattern>/download</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

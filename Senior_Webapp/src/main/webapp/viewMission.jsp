@@ -29,6 +29,28 @@
 </nav>
 
 <p>${missionFile}</p>
+<p><button id="missionDownloadButton" onclick="download('${missionFile}');">download</button></p>
+<script>
+function download(paramValue){
+    console.log("asdf2");
+    var actionPath = "/download";
+    var paramName = "file";
+    var postForm = document.createElement("form");
+    postForm.setAttribute("method", "post");
+    postForm.setAttribute("action", actionPath);
 
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("type", "hidden");
+    hiddenField.setAttribute("name", paramName);
+    hiddenField.setAttribute("value", paramValue);
+    console.log("asdf");
+    postForm.appendChild(hiddenField);
+    document.body.appendChild(postForm);
+    postForm.submit();
+}
+function temp(){
+    console.log("logggggg");
+}
+</script>
 </body>
 </html
