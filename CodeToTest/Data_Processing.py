@@ -9,6 +9,7 @@ import datetime
 FOV = 500
 
 current_time = datetime.datetime.now()
+# print str(current_time)
 
 def dataExport():
     with open('C://Users/Alec/Desktop/Video_Data_Export.csv', 'rb') as columns:
@@ -41,7 +42,14 @@ def dataExport():
                     position_list.append([vehicle_number, row[1], row[vehicle_number*2], row[vehicle_number*2+1]])
                     vehicle_number += 1
             # Check if there are any new dashes in the row
-                # For each new dash, append the corresponding time stamp to the position list
+            k = 0
+            while k <= len(current_row)/2 - 2:
+                if(current_row[2+k*2]) == '-' and prev_row[2+k*2] != '-':
+                    # For each new dash, append the corresponding time stamp to the position list
+                    position_list[k].append(prev_row[1])
+                    position_list[k].append(prev_row[2+k*2])
+                    position_list[k].append(prev_row[3+k*2])
+                k += 1
             prev_row = current_row
 
     return position_list
@@ -51,10 +59,10 @@ def dataExport():
 def velocity_calc(pos_data):
     for car in pos_data:
         # Currently gives distance in pixels. Need to change to give data in feet/meters
-        x_dist = car[4] - car[2]
-        y_dist = car[5] - car[3]
+        x_dist = int(car[5]) - int(car[2])
+        y_dist = int(car[6]) - int(car[3])
         total_dist = math.sqrt(x_dist*x_dist + y_dist*y_dist)
-        velocity = total_dist / (car[4] - car[1])
+        velocity = total_dist / (float(car[4]) - float(car[1]))
         car.append(velocity)
 
     return pos_data
@@ -64,10 +72,12 @@ def velocity_calc(pos_data):
 def csvConvert(data):
     with open('C://Users/Alec/Desktop/Velocity_Data.csv', 'ab') as vidprocess:
         process = csv.writer(vidprocess, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        process.writerow(['Mission Start Time:', current_time])
+        process.writerow(['Car Number', 'Entry Time Offset', 'Entry X Position', 'Entry Y Position', 'Exit Time Offst', 'Exit X Position', 'Exit Y Position', 'Average Velocity'])
         for item in data:
             process.writerow(item)
     vidprocess.close()
 
-# print dataExport()
-# test = dataExport()
-# csvConvert(test)
+test = dataExport()
+output = velocity_calc(test)
+csvConvert(output)

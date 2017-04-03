@@ -3,6 +3,7 @@
 from dronekit import connect, VehicleMode, LocationGlobalRelative, LocationGlobal, Command
 import time
 import math
+from pymavlink import mavutil
 
 
 #Set up option parsing to get connection string
@@ -155,6 +156,10 @@ def readmission(aFileName):
                 ln_autocontinue=int(linearray[11].strip())
                 cmd = Command( 0, 0, 0, ln_frame, ln_command, ln_currentwp, ln_autocontinue, ln_param1, ln_param2, ln_param3, ln_param4, ln_param5, ln_param6, ln_param7)
                 missionlist.append(cmd)
+    # Dummy waypoint to signal end of mission
+    last = Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,
+                  mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, -34.364114, 149.166022, 30)
+    missionlist.append(last)
     return missionlist
 
 def upload_mission(aFileName):
@@ -183,15 +188,11 @@ upload_mission(import_mission_filename)
 
 # Argument is altitude of drone
 # Currently set as a constant for testing purposes
-arm_and_takeoff(30)
+arm_and_takeoff(100)
 
 print "Starting mission"
 # Reset mission set to first (0) waypoint
 vehicle.commands.next = 0
-# last = Command(4,0,0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT,
-#     0, 0, 0, 0, 0,
-#     -35.000, 150.000, 300, 1)
-# vehicle.commands.add(last)
 
 # Set mode to AUTO to start mission
 vehicle.mode = VehicleMode("AUTO")
@@ -210,8 +211,8 @@ vert_FOV = altitude * math.tan(math.radians(vert_angle/2)) * 2
 print "Horizontal FOV is " + str(horiz_FOV)
 print "Vertical FOV is " + str(vert_FOV)
 
-# Sends drone to next waypoint and iterates until it's reached
-while nextwaypoint < vehicle.commands.count:
+# Sends drone to next waypoint and iterates until it reaches final waypoint
+while nextwaypoint != vehicle.commands.count:
     nextwaypoint = vehicle.commands.next
     print 'Distance to waypoint (%s): %s' % (nextwaypoint, distance_to_current_waypoint())
     time.sleep(2)
