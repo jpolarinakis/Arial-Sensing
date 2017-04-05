@@ -16,14 +16,33 @@ public class MissionData{
     @Id private Long id;
 
     private String DroneMissionScript;
+    private String MissionData;
+    private boolean DataUploaded;
 
     MissionData(){
         DroneMissionScript = "";
+        MissionData = "";
+        DataUploaded = false;
     }    
     
     MissionData(String scriptText, Mission p){
         DroneMissionScript = scriptText;
         parentMission = Key.create(Mission.class, p.getId());
+        DataUploaded = false;
+        MissionData = "";
+    }
+    
+    public boolean isDataUploaded(){
+        return DataUploaded;
+    }
+    
+    public void setData(String data){
+        MissionData = data;
+        DataUploaded = true;
+    }
+    
+    public String getData(){
+        return MissionData;
     }
 
     public String getMissionScript(){

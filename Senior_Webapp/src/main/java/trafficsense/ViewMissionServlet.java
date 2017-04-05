@@ -33,6 +33,8 @@ public class ViewMissionServlet extends HttpServlet {
         }
         
         String missionString;
+        String missionData;
+        boolean isUploaded;
 
         String missionIdStr = req.getPathInfo();
         missionIdStr = missionIdStr.substring(1);
@@ -48,11 +50,17 @@ public class ViewMissionServlet extends HttpServlet {
         
             MissionData mDataClass = data.get(0);
             missionString = mDataClass.getMissionScript();
+            isUploaded = mDataClass.isDataUploaded();
+            missionData = mDataClass.getData();
         }else{
             missionString = missionIdStr + " *** ";
+            return;
         }
         
+        req.setAttribute("missionId", missionIdStr);        
         req.setAttribute("missionFile", missionString);
+        req.setAttribute("dataUploaded", isUploaded);
+        req.setAttribute("missionData", missionData);
         RequestDispatcher dispatch = req.getRequestDispatcher("/viewMission.jsp");
         if(dispatch == null){
             return;

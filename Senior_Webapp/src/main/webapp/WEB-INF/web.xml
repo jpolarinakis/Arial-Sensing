@@ -34,6 +34,16 @@
         <url-pattern>/download</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>uploadservlet</servlet-name>
+        <servlet-class>trafficsense.UploadDataServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>uploadservlet</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>

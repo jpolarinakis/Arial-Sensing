@@ -28,8 +28,18 @@
     <%= user.getUserId() %>
 </nav>
 
-<p>${missionFile}</p>
-<p><button id="missionDownloadButton" onclick="download('${missionFile}');">download</button></p>
+<p>mission ID: ${missionId}</p>
+<p>data is uploaded: ${dataUploaded}</p>
+<p>text of data: ${missionData}</p>
+<p>Download drone mission file: <button id="missionDownloadButton" onclick="download('${missionFile}');">download</button></p>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+    input a data file to upload for this mission
+    <input type="file" name="file" />
+    <input type="hidden" name="id" value="${missionId}" />
+    <input type="submit" />
+</form>
+
 <script>
 function download(paramValue){
     console.log("asdf2");
