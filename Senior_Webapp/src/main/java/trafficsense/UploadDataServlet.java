@@ -101,7 +101,7 @@ public class UploadDataServlet extends HttpServlet {
                 return;
             }
         
-        //resp.sendRedirect(redirectURL);
+        resp.sendRedirect(redirectURL);
         return;
     }
 }
