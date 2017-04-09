@@ -32,7 +32,7 @@
 
 <nav>
     <a href="/newMission.jsp">addMission</a>|
-    <a href="/loadMission.jsp">loadMissions</a>|
+    <a href="/viewMission.jsp">loadMissions</a>|
     <a href='<%= userService.createLogoutURL("/index.jsp", null) %>'>logout</a>|
     <%= user.getUserId() %>
 </nav>

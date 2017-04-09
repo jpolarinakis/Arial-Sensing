@@ -23,7 +23,7 @@
 
 <nav>
     <a href="/newMission.jsp">addMission</a>|
-    <a href="/loadMission.jsp">loadMissions</a>|
+    <a href="/loadMission.jsp">viewMissions</a>|
     <a href='<%= userService.createLogoutURL("/index.jsp", null) %>'>logout</a>|
     <%= user.getUserId() %>
 </nav>
@@ -31,8 +31,8 @@
 <p>mission ID: ${missionId}</p>
 <p>data is uploaded: ${dataUploaded}</p>
 <p>text of data: ${missionData}</p>
-<p>Download drone mission file: <button id="missionDownloadButton" onclick="download('${missionFile}');">download</button></p>
 --%>
+<p>Download drone mission file: <button id="missionDownloadButton" onclick="download('${missionFile}');">download</button></p>
 
 <form action="/upload" method="post" enctype="multipart/form-data">
     input a data file to upload for this mission
