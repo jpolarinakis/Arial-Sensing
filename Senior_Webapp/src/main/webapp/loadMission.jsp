@@ -58,7 +58,7 @@
 <%
         for(Mission m : missions){
 %>
-    <p><b>Mission Date: <%= m.getDate().toString() %> Id:<%= m.getId().toString() %></b>
+    <p><b>Mission Date Created: <%= m.getDate().toString() %></b>
        <p> Data: <a href=<%="/viewmission/" + m.getId().toString()%>>load</a></p>
 <%
         }
