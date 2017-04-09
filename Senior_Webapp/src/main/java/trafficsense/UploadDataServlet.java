@@ -69,6 +69,7 @@ public class UploadDataServlet extends HttpServlet {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         sBuild.append(line);
+                        sBuild.append("\\n");
                     }
 
 
