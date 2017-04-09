@@ -27,11 +27,12 @@
     <a href='<%= userService.createLogoutURL("/index.jsp", null) %>'>logout</a>|
     <%= user.getUserId() %>
 </nav>
-
+<%--
 <p>mission ID: ${missionId}</p>
 <p>data is uploaded: ${dataUploaded}</p>
 <p>text of data: ${missionData}</p>
 <p>Download drone mission file: <button id="missionDownloadButton" onclick="download('${missionFile}');">download</button></p>
+--%>
 
 <form action="/upload" method="post" enctype="multipart/form-data">
     input a data file to upload for this mission
@@ -40,6 +41,13 @@
     <input type="submit" />
 </form>
 
+<% if((Boolean)request.getAttribute("dataUploaded") == true){%>
+<p>
+<button id="graph_0">Graph 0</button><button id="graph_1">Graph 1</button>
+</p>
+<%}else{%>
+<p>no data has been uploaded</p>
+<%}%>
 <script>
 function download(paramValue){
     console.log("asdf2");

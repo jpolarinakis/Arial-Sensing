@@ -34,7 +34,7 @@ public class ViewMissionServlet extends HttpServlet {
         
         String missionString;
         String missionData;
-        boolean isUploaded;
+        Boolean isUploaded;
 
         String missionIdStr = req.getPathInfo();
         missionIdStr = missionIdStr.substring(1);
