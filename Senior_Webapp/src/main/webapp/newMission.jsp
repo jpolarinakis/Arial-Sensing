@@ -55,7 +55,7 @@
     4) Implement delete button functionality
     */
     //var myLatLng = {lat: 30.2672, lng: -97.7431};
-    var myLatLng = {lat: -35.363, lng: 149.165};
+    var myLatLng = {lat: 30.288225, lng: -97.735565};
     var marker;
     var totalLatLongs;
     var currentScript;
