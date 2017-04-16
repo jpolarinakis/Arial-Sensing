@@ -17,25 +17,27 @@
     <!-- Here is the javascript -->
     <script type="text/javascript">
     var dataset = [[0,1,3,10],[1,2,4,10]];
+    /*
     var AlecData =[[0,0,2,15],[1,0,3,15],[2,0,1,20],[3,0,1,20],[4,1,4.5,20],
                    [5,1.5,5,20],[6,1.75,3,25],[7,2,4,25],[8,2,4,30],
                    [9,3,5,30],[10,5,7,35]];
-
-    var csvData = 'Mission Start Time:,2017-04-09 13:38:25.936000 Car Number,Entry Time Offset,Entry X Position,Entry Y Position,Exit Time Offst,Exit X Position,Exit Y Position,Average Velocity 1,0,0,0,0.08334,20,30,11.247068166360329,2,0.04167,100,200,0.12501,300,200,62.387509188386019';
-    convertCSV(csvData);   
+    */
+    var csvData = 'text of data: Mission Start Time:,40:26.4,,,,,,\nCar Number,Entry Time Offset,Entry X Position,Entry Y Position,Exit Time Offst,Exit X Position,Exit Y Position,Average Velocity\n1,3,55,270,4.3,357,345,43.71956437\n2,5.6,71,321,6.3,213,358,38.26037096\n3,9.5,52,250,11.8,753,280,56.14032251\n4,10.9,48,278,13.4,739,284,50.8795077\n5,14.5,50,255,15.8,593,316,77.24184357\n6,16.2,53,285,18.3,745,299,60.66593591\n7,16.7,40,288,18.6,733,336,67.25680199\n8,17.4,51,297,19.4,744,333,63.84487076\n9,19.3,746,139,21.4,64,93,59.88005837\n10,21,51,290,24,749,333,42.88756547\n11,23.5,63,291,25.8,747,334,54.82144137\n12,26.2,72,296,28.3,739,316,58.48476037\n13,26.9,732,175,27.5,581,180,46.34397922\n14,28.7,745,110,31.3,49,80,49.30884375\n15,31,747,163,33.6,56,126,48.9727277\n16,34,55,249,35.9,735,287,65.95467674\n17,37.2,61,303,37.7,189,347,49.12514492\n18,40,743,139,42.1,46,79,61.26111294\n19,42,742,190,43.9,61,136,66.12821182\n20,44,47,247,46.1,743,311,61.19656786\n21,45.5,54,246,47.4,755,321,68.19854666\n22,47,731,140,49.4,45,85,52.73857757\n';
+    var AlecData = convertCSV(csvData);   
 
     var ctx = document.getElementById("barChart");
     //var testExample = [65, 59, 80, 81, 56, 55, 40];
-    var testExample = generateImplementation(AlecData);
-    var axisData = generateImpAxis(AlecData);
-    //generateChart();
-    var data = {
+    //var testExample = generateImplementation(AlecData);
+    //var axisData = generateImpAxis(AlecData);
+    var testExample = generateChartData(AlecData);
+    var axisData = generateChartAxis(AlecData);
+var data = {
     labels: axisData,
     datasets: [
         {
-            label: "number of cars/second",
-            backgroundColor: 'rgba(255, 159, 64, 0.2)',
-            borderColor: 'rgba(255, 159, 64, 1)',
+            label: "number of cars/ average velocity (mph)",
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255,99,132,1)',
             borderWidth: 1,
             data: testExample,
         }
@@ -62,16 +64,18 @@
        function generateChartData(dataset)
     {
      //1) get the time variation for the bar chart
-     var endTime = dataset[dataset.length-1][2];
-     var bucketTimeIncrement = (endTime - 0)/8;
-     var buckets = [];
+    var endTime = dataset[dataset.length-1][4];
+     var bucketTimeIncrement = Math.trunc((endTime - 0)/8);
      
-     for(i =0; i < dataset.length; i++)
+     if(isNaN(endTime)){console.log("blah");}
+     if(isNaN(bucketTimeIncrement)){console.log("blah 2");}
+     var buckets = [];
+     for(i =0; i < dataset.length; i++)//for all the times
      {
         var currentMaxTime = bucketTimeIncrement;
         var currentMinTime = 0;
         var j =-1;
-        for( currentMinTime = 0; currentMinTime < endTime; currentMinTime+= bucketTimeIncrement)
+        for( currentMinTime = 0; currentMinTime < endTime; currentMinTime+= bucketTimeIncrement)//for all the times
         {
             j++;
             var current = dataset[i];
@@ -92,6 +96,7 @@
             
         }
      }
+     console.log("now here");
         for(k =0; k <buckets.length; k++)
         {
             if((isNaN(buckets[k])) || (buckets[k]==undefined) || (buckets[k] == null))
@@ -99,10 +104,14 @@
                buckets[k] = 0;
             }
         }
-        //at this point buckets is the correct output and is ready to be used  
-        //this line will be used for generateImplementation...
-        generateImplementation(dataset);
+        console.log(buckets.length);
+         for(k =0; k < buckets.length; k++)
+         {
+            console.log(buckets[k]);
+         }   
+
         return buckets;
+
 
     }
     function generateChartAxis(dataset)
@@ -110,15 +119,18 @@
       //test data since I don't have actual data
           var axis = [];
           var endTime = dataset[dataset.length-1][4];//changed 2 to 4
-          var timeIncrement = (endTime - 0)/8;
+          var timeIncrement = Math.trunc((endTime - 0)/8);
           var currentMaxTime = timeIncrement;
           var currentMinTime = 0;
+          var i=0;
           for(k = 0; currentMinTime <= endTime- timeIncrement; k++)
           {
+            i++;
             axis[k] = currentMinTime + "-" + currentMaxTime;
             currentMaxTime += timeIncrement;
             currentMinTime += timeIncrement;
           }
+          axis[i] = currentMinTime + "-" + currentMaxTime;
           return axis;
 
     } 
@@ -126,21 +138,29 @@
     {
         var axis = [];
         var minMaxSpeed = findMinMax(dataset);
-        var speedInc = (minMaxSpeed[1] - minMaxSpeed[0])/8;
-        var cMinSpeed = minMaxSpeed[0];
-        var cMaxSpeed = cMinSpeed + speedInc;
+        var minSpeed = Math.trunc(parseInt(minMaxSpeed[0]));
+        var maxSpeed = Math.trunc(parseInt(minMaxSpeed[1]))+1;
+        var speedInc = Math.trunc((maxSpeed-minSpeed)/8);
+        var cMinSpeed = minSpeed;
+        var cMaxSpeed = minSpeed + speedInc;
+  
+        var i =0;
         for(k = 0; cMinSpeed <= minMaxSpeed[1]-speedInc; k++)
         {
             axis[k]= cMinSpeed + "-" + cMaxSpeed;
-            cMaxSpeed += speedInc;
-            cMinSpeed += speedInc;
+            cMaxSpeed = parseInt(cMaxSpeed) +  parseInt(speedInc);
+            cMinSpeed = parseInt(speedInc) + parseInt(cMinSpeed);
+            if(isNaN(cMinSpeed)){console.log("nan min");}
+            if(isNaN(cMaxSpeed)){console.log("nan max");}
+            i++;
         }
-        /*
+        axis[i] = cMinSpeed + "-" + cMaxSpeed;
+        
         for(k = 0; k < axis.length; k++)
         {
             console.log(axis[k]);
         }
-        */
+        
         return axis;
     }
     function generateImplementation(dataset)
@@ -148,15 +168,19 @@
         
         var buckets = [];
         var minMax = findMinMax(dataset);//gets minimum and maximum speed
-        var minSpeed = minMax[0];
-        var maxSpeed =minMax[1];
-        var delta = (maxSpeed-minSpeed)/8;
+        var minSpeed = Math.trunc(parseInt(minMax[0]));
+        var maxSpeed = Math.trunc(parseInt(minMax[1]))+1;
+        console.log(minSpeed);
+        console.log(maxSpeed);
+        var delta = Math.trunc((maxSpeed-minSpeed)/8);
        //           console.log("time delta is: " + delta);
         var currentMinSpeed = minSpeed;
         var currentMaxSpeed = minSpeed;
         var j =0;
         for(currentMinSpeed = minSpeed; currentMinSpeed < maxSpeed; currentMinSpeed+=delta) {//for  all the speed increments
             currentMaxSpeed += delta;
+            console.log(currentMinSpeed);
+            console.log(currentMaxSpeed);
             for(k = 0; k < dataset.length; k++) { //for all the individual datapoints    
                 //console.log("this speed is: " + dataset[k][3]);
             if(currentMinSpeed <= dataset[k][7] && dataset[k][7] < currentMaxSpeed)
@@ -207,39 +231,74 @@
                 ret[1] = dataset[i][7];
             }
         }
-        console.log("min is: " + ret[0]);
-        console.log("max is: " + ret[1]);
+        //console.log("min is: " + ret[0]);
+        //console.log("max is: " + ret[1]);
 
         return ret;
     }
     function convertCSV(csvText)
     {
-        csvText = csvText + ",";
+        //csvText = csvText + ",";
         var ret = [];
         var findMinPoint = csvText.search("Average Velocity");
         var data = csvText.substring(findMinPoint+17, csvText.length);
-        var moreData = 1
+        var moreData = 1;
         var spot = 0;
-        while(moreData != "-1")
+        while(data.length > 0)
         {
             var add = [];
             moreData = data.search(",");
-            for(i =0; i < 8; i++)
+            for(i =0; i < 7; i++)
             {
                 var toAdd = data.substring(0,moreData);
                 add[i] = toAdd;
                 data = data.substring(moreData+1,data.length);
                 moreData = data.search(",");
             }
+            var foo = data.search("\n");
+            if( foo != -1){
+            var toAdd = data.substring(0,foo);
+            add[7] = toAdd;
+            data = data.substring(foo+1,data.length);
+            moreData = data.search(",");
+        }
+        else{
+            foo = data.search(",");
+            var toAdd = data.substring(0,moreData);
+            add[i] = toAdd;
+            data = data.substring(moreData+1,data.length);
+            moreData = data.search(",");
+        }
+            //console.log(toAdd);
+            
+
             ret[spot] = add;
             spot++;
 
         }
-        //debug
-        for(j = 0; j < ret.length; j++)
+       // for(i =0; i < ret.length; i++){console.log(ret[i]);}
+        return ret;
+    }
+    function findTotalCars(dataset)
+    {
+        return dataset.length;
+
+    }
+    function findAverageVelocity(dataset)
+    {
+        var totalCars = dataset.length;
+        var totalSpeed = 0;
+        for(i = 0; i< dataset.length; i++)
         {
-            console.log(ret[j]);
+            totalSpeed += dataset[i][7];
         }
+        return totalSpeed/totalCars;
+    }
+    function findMissionTime(csvText)
+    {
+        var beginning = csvText.search(":");
+        var end = csvText.search("Car Number");
+        return csvText.substring(beginning+1,end);
     }
     </script>    
   </body>
