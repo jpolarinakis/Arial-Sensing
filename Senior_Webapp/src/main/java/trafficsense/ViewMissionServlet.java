@@ -25,6 +25,7 @@ public class ViewMissionServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+	//user logged in?
         UserService userservice = UserServiceFactory.getUserService();
         User user = userservice.getCurrentUser();
         if(user == null){
@@ -40,6 +41,7 @@ public class ViewMissionServlet extends HttpServlet {
         missionIdStr = missionIdStr.substring(1);
         Long missionId = Long.decode(missionIdStr);
         
+	//pull the mission from the datastore
         if(missionId != null){
             Key<Mission> queryKey = Key.create(Mission.class, missionId);
             List<MissionData> data = ObjectifyService.ofy()
@@ -57,6 +59,7 @@ public class ViewMissionServlet extends HttpServlet {
             return;
         }
         
+	//send the request to the jsp page
         req.setAttribute("missionId", missionIdStr);        
         req.setAttribute("missionFile", missionString);
         req.setAttribute("dataUploaded", isUploaded);

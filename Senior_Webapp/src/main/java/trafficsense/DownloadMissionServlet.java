@@ -12,8 +12,9 @@ public class DownloadMissionServlet extends HttpServlet {
     
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	//get the text that the user wants
         String fileText = (String) req.getParameter(paramName);
-        //fileText = fileText.replaceAll("(\\r|\\n|\\r\\n)+", "\\\\n");
+
         if(fileText == null){
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Mission Text not present");
             return;
@@ -21,6 +22,7 @@ public class DownloadMissionServlet extends HttpServlet {
         
         String fileName = "MissionFile.txt";
         
+	//this just sets up the response, basically just telling the browser to treat it as a download
         resp.setContentType("text/plain");
         resp.setHeader("Content-disposition", "attachment; filename=\""+fileName+"\"");
         

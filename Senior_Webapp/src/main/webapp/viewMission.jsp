@@ -3,6 +3,8 @@
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
 
 <html lang="en">
 
@@ -27,6 +29,9 @@
     }
 
 %>
+<%
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+%>
 
 <nav>
     <a href="/newMission.jsp">addMission</a>|
@@ -42,7 +47,7 @@
 
 <p>Download drone mission file: <button id="missionDownloadButton" onclick="download('${missionFile}');">download</button></p>
 
-<form action="/upload" method="post" enctype="multipart/form-data">
+<form action='<%= blobstoreService.createUploadUrl("/upload") %>' method="post" enctype="multipart/form-data">
     input a data file to upload for this mission
     <input type="file" name="file" />
     <input type="hidden" name="id" value="${missionId}" />
@@ -58,6 +63,7 @@
 <p>no data has been uploaded</p>
 <%}%>
 <script type="text/javascript">
+/*
     var csvData = '${missionData}'
     csvData = convertCSV(csvData); 
     var ctx = document.getElementById("barChart");
@@ -93,7 +99,7 @@
 		maintainAspectRatio: false
 	    }
 	});
-
+*/
    //GENERATE DATA AREA
        function generateChartData(dataset)
     {
