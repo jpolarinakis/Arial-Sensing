@@ -82,12 +82,14 @@ function generateChart(type){
         ChartArea.destroy();
     }
     if(type == false){
-     	testExample = generateChartData(convertedData);
-     	axisData = generateChartAxis(convertedData);
+ 	testExample = generateImplementation(convertedData);
+	axisData = generateImpAxis(convertedData);
 	labelText = "number of cars/average velocity (mph)";
     }else{
-	testExample = generateImplementation(convertedData);
-	axisData = generateImpAxis(convertedData);
+
+
+    	testExample = generateChartData(convertedData);
+     	axisData = generateChartAxis(convertedData);
 	labelText = "count of cars/ time (s)";
     }
 var data = {
