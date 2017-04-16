@@ -360,6 +360,22 @@ var data = {
         var end = csvText.search("Car Number");
         return csvText.substring(beginning+1,end);
     }
+function download(paramValue){
+
+    var actionPath = "/download";
+    var paramName = "file";
+    var postForm = document.createElement("form");
+    postForm.setAttribute("method", "post");
+    postForm.setAttribute("action", actionPath);
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("type", "hidden");
+    hiddenField.setAttribute("name", paramName);
+    hiddenField.setAttribute("value", paramValue);
+
+    postForm.appendChild(hiddenField);
+    document.body.appendChild(postForm);
+    postForm.submit();
+}
 </script>
 </body>
 </html
