@@ -42,8 +42,9 @@
 <%--
 <p>mission ID: ${missionId}</p>
 <p>data is uploaded: ${dataUploaded}</p>
---%>
 <p>text of data: ${missionData}</p>
+--%>
+
 
 <p>Download drone mission file: <button id="missionDownloadButton" onclick="download('${missionFile}');">download</button></p>
 
@@ -56,7 +57,9 @@
 
 <% if((Boolean)request.getAttribute("dataUploaded") == true){%>
 <p>
-<button id="graph_0">Graph 0</button><button id="graph_1">Graph 1</button>
+</p>
+<p>
+<button id="graph_0" onclick='generateChart(false)'>Number of cars per average speed</button><button id="graph_1" onclick='generateChart(true)'>Number of cars per block of time</button>
 </p>
 <canvas id="barChart" height="50" width="50"></canvas>
 <%}else{%>
@@ -64,17 +67,34 @@
 <%}%>
 <script type="text/javascript">
 
-    var csvData = '${missionData}'
-    csvData = convertCSV(csvData); 
-    var ctx = document.getElementById("barChart");
-    var axisData = generateChartAxis(csvData);
-    var testExample = generateChartData(csvData);
+var ChartArea = false;
+generateChart(false);
+function generateChart(type){
+	var csvData = "${missionData}";
+	var convertedData = convertCSV(csvData);   
 
+    var ctx = document.getElementById("barChart");
+    var testExample;
+    var axisData;
+    var labelText;
+
+    if(ChartArea != false){
+        ChartArea.destroy();
+    }
+    if(type == false){
+     	testExample = generateChartData(convertedData);
+     	axisData = generateChartAxis(convertedData);
+	labelText = "number of cars/average velocity (mph)";
+    }else{
+	testExample = generateImplementation(convertedData);
+	axisData = generateImpAxis(convertedData);
+	labelText = "count of cars/ time (s)";
+    }
 var data = {
     labels: axisData,
     datasets: [
         {
-            label: "number of cars/ average velocity (mph)",
+            label: labelText,
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255,99,132,1)',
             borderWidth: 1,
@@ -82,8 +102,7 @@ var data = {
         }
     ]
 };
-
-new Chart(ctx, {
+   ChartArea = new Chart(ctx, {
     type: "bar",
     data: data,
 
@@ -99,8 +118,7 @@ new Chart(ctx, {
         maintainAspectRatio: false
     }
 });
-
-
+}
 
    //GENERATE DATA AREA
       function generateChartData(dataset)
