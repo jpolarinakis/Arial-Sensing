@@ -58,9 +58,12 @@
 <% if((Boolean)request.getAttribute("dataUploaded") == true){%>
 <p>
 </p>
+<p id="summarizeInfo"></p>
+<p id="leftRightInfo"></p>
 <p>
-<button id="graph_0" onclick='generateChart(false)'>Number of cars per average speed</button><button id="graph_1" onclick='generateChart(true)'>Number of cars per block of time</button>
+<button id="graph_0" onclick='generateChart(false, true)'>Number of cars per average speed</button><button id="graph_1" onclick='generateChart(true, true)'>Number of cars per block of time</button>
 </p>
+
 <canvas id="barChart" height="50" width="50"></canvas>
 <%}else{%>
 <p>no data has been uploaded</p>
@@ -68,8 +71,8 @@
 <script type="text/javascript">
 
 var ChartArea = false;
-generateChart(false);
-function generateChart(type){
+generateChart(false, false);
+function generateChart(type, afterDOM){
 	var csvData = "${missionData}";
 	var convertedData = convertCSV(csvData);   
 
@@ -77,7 +80,13 @@ function generateChart(type){
     var testExample;
     var axisData;
     var labelText;
-
+if(afterDOM){
+var toSummarize = "Total cars detected: " + findTotalCars(convertedData) + " cars | " + "Average velocity: " + findAverageVelocity(convertedData) + " mph";
+document.getElementById("summarizeInfo").innerHTML = toSummarize;
+var nums = countLeftRight(convertedData);//check that this is spelled correctly
+var lrInfo= "Total cars going to the right: " + nums[1] + " cars | " + "Total cars going to the left: " + nums[0] + " cars";
+document.getElementById("leftRightInfo").innerHTML = lrInfo;
+}
     if(ChartArea != false){
         ChartArea.destroy();
     }
@@ -352,10 +361,56 @@ var data = {
         var totalSpeed = 0;
         for(i = 0; i< dataset.length; i++)
         {
-            totalSpeed += dataset[i][7];
+		var tempSpeed = dataset[i][7];
+		tempSpeed = Math.abs(parseFloat(tempSpeed));
+		totalSpeed = totalSpeed + tempSpeed;
         }
-        return totalSpeed/totalCars;
+        return Math.trunc(totalSpeed/totalCars);
     }
+
+	function countLeftRight(csvText)
+    {
+        var ret = [0,0];
+
+        var findMinPoint = csvText.search("Average Velocity");
+        var data = csvText.substring(findMinPoint+17, csvText.length);
+        var moreData = 1;
+        while(data.length > 0)
+        {
+            moreData = data.search(",");
+            for(i =0; i < 7; i++)
+            {
+                data = data.substring(moreData+1,data.length);
+                moreData = data.search(",");
+            }
+            var foo = data.search("\n");
+            if( foo != -1){
+                var speed = data.substring(0,foo);
+                if(speed > 0)
+                {
+                    ret[1]++;
+                }
+                else
+                {
+                    ret[0]++;
+                }
+            data = data.substring(foo+1,data.length);
+            moreData = data.search(",");
+        }
+        else{
+            foo = data.search(",");
+            data = data.substring(moreData+1,data.length);
+            moreData = data.search(",");
+        }
+            //console.log(toAdd);
+
+        }
+       // for(i =0; i < ret.length; i++){console.log(ret[i]);}
+       console.log(ret[0]);
+       console.log(ret[1]);
+        return ret;
+    }
+
     function findMissionTime(csvText)
     {
         var beginning = csvText.search(":");
