@@ -83,7 +83,7 @@ function generateChart(type, afterDOM){
 if(afterDOM){
 var toSummarize = "Total cars detected: " + findTotalCars(convertedData) + " cars | " + "Average velocity: " + findAverageVelocity(convertedData) + " mph";
 document.getElementById("summarizeInfo").innerHTML = toSummarize;
-var nums = countLeftRight(convertedData);//check that this is spelled correctly
+var nums = countLeftRight(csvData);//check that this is spelled correctly
 var lrInfo= "Total cars going to the right: " + nums[1] + " cars | " + "Total cars going to the left: " + nums[0] + " cars";
 document.getElementById("leftRightInfo").innerHTML = lrInfo;
 }
@@ -329,7 +329,10 @@ var data = {
             var foo = data.search("\n");
             if( foo != -1){
             var toAdd = data.substring(0,foo);
-            add[7] = toAdd;
+
+	    var posToAdd = Math.abs(toAdd);
+
+            add[7] = posToAdd;
             data = data.substring(foo+1,data.length);
             moreData = data.search(",");
         }
